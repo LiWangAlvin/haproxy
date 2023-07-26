@@ -538,6 +538,7 @@ struct connection {
 	struct sockaddr_storage *dst; /* destination address (pool), when known, otherwise NULL */
 	struct ist proxy_authority;   /* Value of the authority TLV received via PROXYv2 */
 	struct ist proxy_unique_id;   /* Value of the unique ID TLV received via PROXYv2 */
+    struct ist proxy_ssl_cn;   /* Value of the SSL CN ID TLV received via PROXYv2 */
 
 	/* used to identify a backend connection for http-reuse,
 	 * thus only present if conn.target is of type OBJ_TYPE_SERVER
@@ -617,6 +618,7 @@ struct mux_proto_list {
 
 /* Max length of the authority TLV */
 #define PP2_AUTHORITY_MAX 255
+#define PP2_TYPE_SSL_CN_MAX 255
 
 #define TLV_HEADER_SIZE      3
 
@@ -658,7 +660,6 @@ struct tlv_ssl {
 	uint32_t verify;
 	uint8_t sub_tlv[VAR_ARRAY];
 }__attribute__((packed));
-
 
 /* This structure is used to manage idle connections, their locking, and the
  * list of such idle connections to be removed. It is per-thread and must be
